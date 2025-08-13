@@ -10,6 +10,7 @@ const modulo = document.getElementById("mod-input");
 const alphabet = document.getElementById("alphabet-input");
 const letterCase = document.getElementById("letter-case");
 const foreignChars = document.getElementById("foreign-chars");
+const numbers = document.getElementById("numbers");
 
 // Change the heading title and clear the content depending on whether to encode or decode
 selectEncodeOrDecode.forEach((option) => {
@@ -40,6 +41,7 @@ form.addEventListener("submit", (event) => {
     let alphabetValue = alphabet.value;
     let letterCaseValue = letterCase.value;
     let foreignCharsValue = foreignChars.value;
+    let numbersValue = numbers.value;
 
 
     /**
@@ -52,14 +54,14 @@ form.addEventListener("submit", (event) => {
    * @param {string} [foreignChars=1] - The foreign characters will be remove.
    * @returns {string} The encode or decode text.
    */
-    function caesarCipher(decode, text, shift, mod, charset, foreignChars) {
+    function caesarCipher(decode, text, shift, mod, charset, foreignChars, numbers) {
         // If decode is equal to decode then reverse the sign of the shift value.
         if (decode == "decode") {
             shift = -shift;
         }
         // If foreignChars is equal to 1 then remove foreign characters
         if (foreignChars == 1) {
-            text = removeForeignChars(text);
+            text = removeForeignChars(text, numbers);
         }
         // Make the character set a lowercase
         charset = charset.toLowerCase();
@@ -88,16 +90,21 @@ form.addEventListener("submit", (event) => {
     /**
      * Removes non-letter and non-digit characters from the input string.
      * @param {string} input - The input string to clean.
+     * @param {string} numbers - Whether to include or remove numbers.
      * @returns {string} The input string with non-letter and non-digit characters removed.
      */
-    function removeForeignChars(input) {
-        // Regular expression to match non-letter and non-digit characters
-        const regex = /[^a-zA-Z0-9]/g;
+    function removeForeignChars(input, numbers) {
+        let regex;
+        if (numbers == 1) { // Include numbers
+            regex = /[^a-zA-Z0-9]/g;
+        } else { // Remove numbers
+            regex = /[^a-zA-Z]/g;
+        }
         // Replace all non-letter and non-digit characters with an empty string
         return input.replace(regex, "");
     }
     // Store the caesarCipher function text output
-    let cipherOutput = caesarCipher(selectedOption.value, inputTextValue, shiftValue, moduloValue, alphabetValue, foreignCharsValue);
+    let cipherOutput = caesarCipher(selectedOption.value, inputTextValue, shiftValue, moduloValue, alphabetValue, foreignCharsValue, numbersValue);
     // Change the letters to lowercase
     if (letterCaseValue == 2) {
         cipherOutput = cipherOutput.toLowerCase();
