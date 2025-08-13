@@ -12,6 +12,39 @@ const letterCase = document.getElementById("letter-case");
 const foreignChars = document.getElementById("foreign-chars");
 const numbers = document.getElementById("numbers");
 const spaces = document.getElementById("spaces");
+const themeToggle = document.getElementById("theme-toggle");
+
+// Theme toggle functionality
+function initializeTheme() {
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    updateThemeToggleIcon(savedTheme);
+}
+
+function updateThemeToggleIcon(theme) {
+    const sunIcon = themeToggle.querySelector('.sun-icon');
+    const moonIcon = themeToggle.querySelector('.moon-icon');
+    
+    if (theme === 'dark') {
+        sunIcon.style.opacity = '1';
+        moonIcon.style.opacity = '0';
+    } else {
+        sunIcon.style.opacity = '0';
+        moonIcon.style.opacity = '1';
+    }
+}
+
+themeToggle.addEventListener('click', () => {
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    updateThemeToggleIcon(newTheme);
+});
+
+// Initialize theme on page load
+initializeTheme();
 
 // Change the heading title and clear the content depending on whether to encode or decode
 selectEncodeOrDecode.forEach((option) => {
